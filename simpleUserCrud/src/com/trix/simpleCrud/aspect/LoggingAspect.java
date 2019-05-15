@@ -14,40 +14,43 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
-	private Logger myLogger=Logger.getLogger(getClass().getName());
-	
+	private Logger myLogger = Logger.getLogger(getClass().getName());
+
 	@Pointcut("execution (* com.trix.simpleCrud.controller.*.*(..))")
-	private void pointCutForControllerPackage() {}
-	
+	private void pointCutForControllerPackage() {
+	}
+
 	@Pointcut("execution (* com.trix.simpleCrud.service.*.*(..))")
-	private void pointCutForServicePackage() {}
-	
+	private void pointCutForServicePackage() {
+	}
+
 	@Pointcut("execution (* com.trix.simpleCrud.dao.*.*(..))")
-	private void pointCutForDaoPackage() {}
-	
+	private void pointCutForDaoPackage() {
+	}
+
 	@Pointcut("pointCutForControllerPackage() || pointCutForServicePackage() || pointCutForSDaoPackage()")
-	private void pointCutforWholeApplication() {}
-	
+	private void pointCutforWholeApplication() {
+	}
+
 	@Before("pointCutforWholeApplication()")
 	public void beforeAnyMethod(JoinPoint theJoinPoint) {
-		MethodSignature method=(MethodSignature) theJoinPoint.getSignature();
-		String nameOfMethod=method.toString();
-		myLogger.info("====> Advice @Before applied on method: "+ nameOfMethod);
-		
-		Object[] methodArguments=theJoinPoint.getArgs();
-		for(Object argument:methodArguments) {
-			myLogger.info("====> Arguments of Method: "+ argument);
+		MethodSignature method = (MethodSignature) theJoinPoint.getSignature();
+		String nameOfMethod = method.toString();
+		myLogger.info("====> Advice @Before applied on method: " + nameOfMethod);
+
+		Object[] methodArguments = theJoinPoint.getArgs();
+		for (Object argument : methodArguments) {
+			myLogger.info("====> Arguments of Method: " + argument);
 		}
 	}
-	
-	@AfterReturning( pointcut="forWholeApplication()", returning="result")
+
+	@AfterReturning(pointcut = "pointCutforWholeApplication()", returning = "result")
 	public void afterReturning(JoinPoint theJoinPoint, Object result) {
-		MethodSignature method=(MethodSignature) theJoinPoint.getSignature();
-		String nameOfMethod=method.toString();
-		myLogger.info("====> Advice @AfterReturning applied on method: "+ nameOfMethod);
-		myLogger.info("====> result of method: "+result);
-		
+		MethodSignature method = (MethodSignature) theJoinPoint.getSignature();
+		String nameOfMethod = method.toString();
+		myLogger.info("====> Advice @AfterReturning applied on method: " + nameOfMethod);
+		myLogger.info("====> result of method: " + result);
+
 	}
-	
-	
+
 }
